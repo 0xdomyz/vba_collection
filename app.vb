@@ -1,5 +1,11 @@
 'Application level code snippets
 
+Application.ScreenUpdating = False
+Application.CutCopyMode = False
+Application.Calculation = xlCalculationManual
+Application.Calculation = xlCalculationAutomatic
+Application.StatusBar = False
+
 Sub
 End Sub
 

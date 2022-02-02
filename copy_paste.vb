@@ -8,15 +8,19 @@
 'Inputs:
 '   tl_orig : Top left cell of the original block.
 '   rep_cel : Representative cell of the target location.
-'   pst_mod : Optional Excel paste mode string.
-'       Either : "value", "value_format", "formula", "all"
-'       Default : "value"
+'   pst_mod : Optional Excel paste mode integer.
+'       Default : xlPasteValues
 '
 'Effects:
 '   A copy paste action.
 '
-'Notes on Excel paste modes:
+'Notes:
+'List of Excel paste modes:
 '   https://docs.microsoft.com/en-us/office/vba/api/Excel.XlPasteType
+'Commonly used:
+'   xlPasteValues, xlPasteValuesAndNumberFormats
+'   ,xlPasteFormats, xlPasteColumnWidths
+'   ,xlPasteAll
 '
 'Example
 '
@@ -31,37 +35,22 @@
 Sub cp_blk( _
     ByRef tl_orig As Range, _
     ByRef rep_cel As Range, _
-    Optional ByVal pst_mod As String = "value")
-
+    Optional ByVal pst_mod As Integer = xlPasteValues)
 Dim br As Range
 Dim cold As Integer
 Dim rowd As Integer
 cold = sf_end(tl_orig, "right").Column - tl_orig.Column
 rowd = sf_end(tl_orig, "down").Row - tl_orig.Row
 Set br = tl_orig.Offset(rowd, cold)
-
 Range(tl_orig, br).Copy
-If pst_mod = "value" Then
-    rep_cel.PasteSpecial Paste:=xlPasteValues, _
-    Operation:=xlNone, SkipBlanks:=False, Transpose:=False
-Elseif pst_mod = "value_format" Then
-    rep_cel.PasteSpecial Paste:=xlPasteValuesAndNumberFormats, _
-    Operation:=xlNone, SkipBlanks:=False, Transpose:=False
-Elseif pst_mod = "formula" Then
-    rep_cel.PasteSpecial Paste:=xlPasteFormulasAndNumberFormats, _
-    Operation:=xlNone, SkipBlanks:=False, Transpose:=False
-Elseif pst_mod = "all" Then
-    rep_cel.PasteSpecial Paste:=xlPasteAll
-Else:
-    MsgBox "Sub cp_blk error, invalid paste modes."
-End if
-
+rep_cel.PasteSpecial Paste:=pst_mod, _
+Operation:=xlNone, SkipBlanks:=False, Transpose:=False
 End Sub
 
 
-'Find the end of a continuous row or column of cells
+'Find range from a safely done end command
 '
-'End action is what happens when pressing control + arrow key, or the End key.
+'End command is what happens when pressing control + arrow key, or the End key.
 'It moves cell selection towards the end, but goes to infinity if the cell is
 'already the end. This function does not goes to infinity, thus it is safe.
 '
