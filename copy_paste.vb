@@ -36,20 +36,20 @@ Sub cp_blk( _
 Dim br As Range
 Dim cold As Integer
 Dim rowd As Integer
-cold = safe_end(tl_orig, "right").Column - tl_orig.Column
-rowd = safe_end(tl_orig, "down").Row - tl_orig.Row
+cold = sf_end(tl_orig, "right").Column - tl_orig.Column
+rowd = sf_end(tl_orig, "down").Row - tl_orig.Row
 Set br = tl_orig.Offset(rowd, cold)
 
 Range(tl_orig, br).Copy
 If pst_mod = "value" Then
     rep_cel.PasteSpecial Paste:=xlPasteValues, _
-    Operation:=xlNone, SkipBlanks:=False, Tranpose:=False
+    Operation:=xlNone, SkipBlanks:=False, Transpose:=False
 Elseif pst_mod = "value_format" Then
     rep_cel.PasteSpecial Paste:=xlPasteValuesAndNumberFormats, _
-    Operation:=xlNone, SkipBlanks:=False, Tranpose:=False
+    Operation:=xlNone, SkipBlanks:=False, Transpose:=False
 Elseif pst_mod = "formula" Then
     rep_cel.PasteSpecial Paste:=xlPasteFormulasAndNumberFormats, _
-    Operation:=xlNone, SkipBlanks:=False, Tranpose:=False
+    Operation:=xlNone, SkipBlanks:=False, Transpose:=False
 Elseif pst_mod = "all" Then
     rep_cel.PasteSpecial Paste:=xlPasteAll
 Else:
