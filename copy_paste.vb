@@ -6,8 +6,86 @@
 'block is to be placed into this representative cell.
 '
 'Inputs:
-'   tl_orig : Top left cell of the original block.
-'   rep_cel : Representative cell of the target location.
+'   a : Top left cell of the original block.
+'   b : Representative cell of the target location.
+'   pst_mod : Optional Excel paste mode integer. See sub cp for details.
+'       Default : xlPasteValues
+'
+'Effects:
+'   A copy paste action.
+'
+'Example
+'
+'Copy paste a block of cells from A1 to E1
+'   A  B  C
+'1  1  2
+'2  3  4
+'3     5  6
+'Call cp_blk(Range("A1"), Range("E1"))
+'   E  F  G
+'1  1  2
+'2  3  4
+'3
+Sub cp_blk( _
+    ByRef a As Range, _
+    ByRef b As Range, _
+    Optional ByVal pst_mod As Integer = xlPasteValues)
+Dim w As Integer
+Dim h As Integer
+w = sf_end(a, "right").Column - a.Column
+h = sf_end(a, "down").Row - a.Row
+Call cp_wh(a,w,h,b,pst_mod)
+End Sub
+
+'Copy paste a range defined by dimension
+'
+'Dimension is the width and height of the table being copied.
+'Then paste into another location represented by a cell. Top left corner of the 
+'original table is to be placed into this representative cell.
+'
+'Inputs:
+'   a : Top left cell of the original table.
+'   w : Width of the table.
+'   h : Height of the table.
+'   b : Representative cell of the target location.
+'   pst_mod : Optional Excel paste mode integer. See sub cp for details.
+'       Default : xlPasteValues
+'
+'Effects:
+'   A copy paste action.
+'
+'Example
+'
+'Copy paste a block of cells from A1 to E1
+'   A  B  C
+'1  1  2
+'2  3  4
+'3     5  6
+'Call cp_wh(Range("A1"), 2, 2, Range("E1"))
+'   E  F  G
+'1  1  2
+'2  3  4
+'3
+Sub cp_wh( _
+    ByRef a As Range, _
+    ByRef w As Integer, _
+    ByRef h As Integer, _
+    ByRef b As Range, _
+    Optional ByVal pst_mod As Integer = xlPasteValues)
+Dim br As Range
+Set br = a.Offset(h, w)
+Call cp(Range(a, br),b,pst_mod)
+End Sub
+
+'Copy paste a range
+'
+'Copy a range.
+'Then paste into another location represented by a cell. Top left corner of the 
+'original range is to be placed into this representative cell.
+'
+'Inputs:
+'   a : Original range.
+'   b : Representative cell of the target location.
 '   pst_mod : Optional Excel paste mode integer.
 '       Default : xlPasteValues
 '
@@ -25,28 +103,23 @@
 'Example
 '
 'Copy paste a block of cells from A1 to E1
-'   A  B
+'   A  B  C
 '1  1  2
 '2  3  4
-'Call cp_blk(Range("A1"), Range("E1"))
-'   E  F
+'3     5  6
+'Call cp(Range("A1:B2"), Range("E1"))
+'   E  F  G
 '1  1  2
 '2  3  4
-Sub cp_blk( _
-    ByRef tl_orig As Range, _
-    ByRef rep_cel As Range, _
+'3
+Sub cp( _
+    ByRef a As Range, _
+    ByRef b As Range, _
     Optional ByVal pst_mod As Integer = xlPasteValues)
-Dim br As Range
-Dim cold As Integer
-Dim rowd As Integer
-cold = sf_end(tl_orig, "right").Column - tl_orig.Column
-rowd = sf_end(tl_orig, "down").Row - tl_orig.Row
-Set br = tl_orig.Offset(rowd, cold)
-Range(tl_orig, br).Copy
-rep_cel.PasteSpecial Paste:=pst_mod, _
+a.Copy
+b.PasteSpecial Paste:=pst_mod, _
 Operation:=xlNone, SkipBlanks:=False, Transpose:=False
 End Sub
-
 
 'Find range from a safely done end command
 '
