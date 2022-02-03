@@ -32,8 +32,8 @@ Sub cp_blk( _
     Optional ByVal pst_mod As Integer = xlPasteValues)
 Dim w As Integer
 Dim h As Integer
-w = sf_end(a, "right").Column - a.Column
-h = sf_end(a, "down").Row - a.Row
+w = sf_end(a, "right").Column - a.Column + 1
+h = sf_end(a, "down").Row - a.Row + 1
 Call cp_wh(a,w,h,b,pst_mod)
 End Sub
 
@@ -73,7 +73,7 @@ Sub cp_wh( _
     ByRef b As Range, _
     Optional ByVal pst_mod As Integer = xlPasteValues)
 Dim br As Range
-Set br = a.Offset(h, w)
+Set br = a.Offset(h - 1, w - 1)
 Call cp(Range(a, br),b,pst_mod)
 End Sub
 
