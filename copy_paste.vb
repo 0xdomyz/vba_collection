@@ -32,23 +32,21 @@
 '2  3  4
 '3
 Sub ve_blk(ByRef a As Range, ByRef b As Range)
-Dim w As Integer
-Dim h As Integer
-w = sf_end(a, "right").Column - a.Column + 1
-h = sf_end(a, "down").Row - a.Row + 1
-Call ve_wh(a,w,h,b)
+    Dim w As Integer
+    Dim h As Integer
+    w = sf_end(a, "right").Column - a.Column + 1
+    h = sf_end(a, "down").Row - a.Row + 1
+    Call ve_wh(a,w,h,b)
 End Sub
-
 Sub ve_wh( _
-    ByRef a As Range, _
-    ByVal w As Integer, _
-    ByVal h As Integer, _
-    ByRef b As Range)
-Call ve(Range(a, a.Offset(h - 1, w - 1)),Range(b, b.Offset(h - 1, w - 1)))
+        ByRef a As Range, _
+        ByVal w As Integer, _
+        ByVal h As Integer, _
+        ByRef b As Range)
+    Call ve(Range(a, a.Offset(h - 1, w - 1)),Range(b, b.Offset(h - 1, w - 1)))
 End Sub
-
 Sub ve(ByRef a As Range, ByRef b As Range)
-b.value = a.value
+    b.value = a.value
 End Sub
 
 'Copy paste range a to range b
@@ -94,32 +92,30 @@ End Sub
 '2  3  4
 '3
 Sub cp_blk( _
-    ByRef a As Range, _
-    ByRef b As Range, _
-    Optional ByVal pst_mod As Integer = xlPasteValues)
-Dim w As Integer
-Dim h As Integer
-w = sf_end(a, "right").Column - a.Column + 1
-h = sf_end(a, "down").Row - a.Row + 1
-Call cp_wh(a,w,h,b,pst_mod)
+        ByRef a As Range, _
+        ByRef b As Range, _
+        Optional ByVal pst_mod As Integer = xlPasteValues)
+    Dim w As Integer
+    Dim h As Integer
+    w = sf_end(a, "right").Column - a.Column + 1
+    h = sf_end(a, "down").Row - a.Row + 1
+    Call cp_wh(a,w,h,b,pst_mod)
 End Sub
-
 Sub cp_wh( _
-    ByRef a As Range, _
-    ByVal w As Integer, _
-    ByVal h As Integer, _
-    ByRef b As Range, _
-    Optional ByVal pst_mod As Integer = xlPasteValues)
-Call cp(Range(a, a.Offset(h - 1, w - 1)),b,pst_mod)
+        ByRef a As Range, _
+        ByVal w As Integer, _
+        ByVal h As Integer, _
+        ByRef b As Range, _
+        Optional ByVal pst_mod As Integer = xlPasteValues)
+    Call cp(Range(a, a.Offset(h - 1, w - 1)),b,pst_mod)
 End Sub
-
 Sub cp( _
-    ByRef a As Range, _
-    ByRef b As Range, _
-    Optional ByVal pst_mod As Integer = xlPasteValues)
-a.Copy
-b.PasteSpecial Paste:=pst_mod, _
-Operation:=xlNone, SkipBlanks:=False, Transpose:=False
+        ByRef a As Range, _
+        ByRef b As Range, _
+        Optional ByVal pst_mod As Integer = xlPasteValues)
+    a.Copy
+    b.PasteSpecial Paste:=pst_mod, _
+    Operation:=xlNone, SkipBlanks:=False, Transpose:=False
 End Sub
 
 'Find range from a safely done end command
@@ -143,19 +139,19 @@ End Sub
 'sf_end(Range("A1"),"right")
 'Range("B2")
 Function sf_end( _
-    ByRef cel As Range, _
-    ByVal dir As String) As Range
-Dim res As Range
-Set res = cel
-If dir = "down" Then
-    If cel.Offset(1,0).Value <> "" Then
-        Set res = cel.End(xlDown)
+        ByRef cel As Range, _
+        ByVal dir As String) As Range
+    Dim res As Range
+    Set res = cel
+    If dir = "down" Then
+        If cel.Offset(1,0).Value <> "" Then
+            Set res = cel.End(xlDown)
+        End If
+    ElseIf dir = "right" Then
+        If cel.Offset(0,1).Value <> "" Then 
+            Set res = cel.End(xlToRight)
+        End If
+    Else: MsgBox "Function sf_end error, invalid direction."
     End If
-ElseIf dir = "right" Then
-    If cel.Offset(0,1).Value <> "" Then 
-        Set res = cel.End(xlToRight)
-    End If
-Else: MsgBox "Function sf_end error, invalid direction."
-End If
-Set sf_end = res
+    Set sf_end = res
 End Function
