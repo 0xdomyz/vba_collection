@@ -20,7 +20,7 @@ End Sub
 'To save status and recover them:
 '   Public CalcState As Long
 '   CalcState = Application.Calculation
-    Application.Calculation = CalcState
+'   Application.Calculation = CalcState
 '
 '   Public EventState As Boolean
 '   EventState = Application.EnableEvents
