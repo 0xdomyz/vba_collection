@@ -1,3 +1,89 @@
+'Subs:
+'   cp_blk
+'   cp_wh
+'   cp
+'   ve_blk
+'   ve_wh
+'   ve
+'
+'functions:
+'   sf_end
+
+
+'Copy paste range a to range b
+'
+'cp_blk(a,b,pst_mod,transpose):
+'Range a represented by top left corner cell of a continuous block.
+'Continuous means no empty cells on top and left edges.
+'
+'cp_wh(a,w,h,b,pst_mod,transpose):
+'Range a defined by top left corner cell and it's width and height.
+'
+'cp(a,b,pst_mod,transpose):
+'Specify range a fully.
+'
+'Inputs:
+'   a : Top left cell of the original block. Original range for cp.
+'   w : Width of the table.
+'   h : Height of the table.
+'   b : Top left corner of the target location.
+'   pst_mod : Optional Excel paste mode integer.
+'       Default : xlPasteValues
+'   transpose : Optional True or False indicating if transpose result
+'
+'Notes:
+'List of Excel paste modes:
+'   https://docs.microsoft.com/en-us/office/vba/api/Excel.XlPasteType
+'Commonly used:
+'   xlPasteValues, xlPasteValuesAndNumberFormats
+'   ,xlPasteFormats, xlPasteColumnWidths
+'   ,xlPasteAll
+'
+'Example
+'
+'Copy paste a block of cells from A1 to E1
+'   A  B  C
+'1  1  2
+'2  3  4
+'3     5  6
+'Call cp_blk(Range("A1"), Range("E1"))
+'Call cp_wh(Range("A1"), 2, 2, Range("E1"))
+'Call cp(Range("A1:B2"), Range("E1"))
+'   E  F  G
+'1  1  2
+'2  3  4
+'3
+Sub cp_blk( _
+        ByRef a As Range, _
+        ByRef b As Range, _
+        Optional ByVal pst_mod As Integer = xlPasteValues, _
+        Optional ByVal transpose As Variant = False)
+    Dim w As Integer
+    Dim h As Integer
+    w = sf_end(a, "right").Column - a.Column + 1
+    h = sf_end(a, "down").Row - a.Row + 1
+    Call cp_wh(a,w,h,b,pst_mod,transpose)
+End Sub
+Sub cp_wh( _
+        ByRef a As Range, _
+        ByVal w As Integer, _
+        ByVal h As Integer, _
+        ByRef b As Range, _
+        Optional ByVal pst_mod As Integer = xlPasteValues, _
+        Optional ByVal transpose As Variant = False)
+    Call cp(Range(a, a.Offset(h - 1, w - 1)),b,pst_mod,transpose)
+End Sub
+Sub cp( _
+        ByRef a As Range, _
+        ByRef b As Range, _
+        Optional ByVal pst_mod As Integer = xlPasteValues, _
+        Optional ByVal transpose As Variant = False)
+    a.Copy
+    b.PasteSpecial Paste:=pst_mod, _
+    Operation:=xlNone, SkipBlanks:=False, Transpose:=transpose
+End Sub
+
+
 'Assign values from range a to range b
 '
 've_blk(a,b,pst_mod):
@@ -49,74 +135,6 @@ Sub ve(ByRef a As Range, ByRef b As Range)
     b.value = a.value
 End Sub
 
-'Copy paste range a to range b
-'
-'cp_blk(a,b,pst_mod):
-'Range a represented by top left corner cell of a continuous block.
-'Continuous means no empty cells on top and left edges.
-'
-'cp_wh(a,w,h,b,pst_mod):
-'Range a defined by top left corner cell and it's width and height.
-'
-'cp(a,b,pst_mod):
-'Specify range a fully.
-'
-'Inputs:
-'   a : Top left cell of the original block. Original range for cp.
-'   w : Width of the table.
-'   h : Height of the table.
-'   b : Top left corner of the target location.
-'   pst_mod : Optional Excel paste mode integer.
-'       Default : xlPasteValues
-'
-'Notes:
-'List of Excel paste modes:
-'   https://docs.microsoft.com/en-us/office/vba/api/Excel.XlPasteType
-'Commonly used:
-'   xlPasteValues, xlPasteValuesAndNumberFormats
-'   ,xlPasteFormats, xlPasteColumnWidths
-'   ,xlPasteAll
-'
-'Example
-'
-'Copy paste a block of cells from A1 to E1
-'   A  B  C
-'1  1  2
-'2  3  4
-'3     5  6
-'Call cp_blk(Range("A1"), Range("E1"))
-'Call cp_wh(Range("A1"), 2, 2, Range("E1"))
-'Call cp(Range("A1:B2"), Range("E1"))
-'   E  F  G
-'1  1  2
-'2  3  4
-'3
-Sub cp_blk( _
-        ByRef a As Range, _
-        ByRef b As Range, _
-        Optional ByVal pst_mod As Integer = xlPasteValues)
-    Dim w As Integer
-    Dim h As Integer
-    w = sf_end(a, "right").Column - a.Column + 1
-    h = sf_end(a, "down").Row - a.Row + 1
-    Call cp_wh(a,w,h,b,pst_mod)
-End Sub
-Sub cp_wh( _
-        ByRef a As Range, _
-        ByVal w As Integer, _
-        ByVal h As Integer, _
-        ByRef b As Range, _
-        Optional ByVal pst_mod As Integer = xlPasteValues)
-    Call cp(Range(a, a.Offset(h - 1, w - 1)),b,pst_mod)
-End Sub
-Sub cp( _
-        ByRef a As Range, _
-        ByRef b As Range, _
-        Optional ByVal pst_mod As Integer = xlPasteValues)
-    a.Copy
-    b.PasteSpecial Paste:=pst_mod, _
-    Operation:=xlNone, SkipBlanks:=False, Transpose:=False
-End Sub
 
 'Find range from a safely done end command
 '
