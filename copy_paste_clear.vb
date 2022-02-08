@@ -1,16 +1,3 @@
-'Subs:
-'   cp_blk
-'   cp_wh
-'   cp
-'   ve_blk
-'   ve_wh
-'   ve
-'   cc_wh
-'
-'functions:
-'   sf_end
-
-
 'Copy paste range a to range b
 '
 'cp_blk(a,b,pst_mod,transpose):
@@ -138,7 +125,7 @@ End Sub
 
 'Clear contents
 '
-'cc_wh(a, w, h, mod)
+'cc_wh(a, w, h, opt)
 '
 'Inputs:
 '   a : Top left cell of the block.
@@ -162,11 +149,11 @@ Sub cc_wh( _
         ByRef a As Range, _
         ByVal w As Integer, _
         ByVal h As Integer, _
-        ByVal opt As String = "contents")
+        Optional ByVal opt As String = "contents")
     If opt = "contents" then
-        Range(a,a.Offset(h-1,w-1)).ClearContents
+        Range(a, a.Offset(h - 1, w - 1)).ClearContents
     ElseIf opt = "all" then
-        Range(a,a.Offset(h-1,w-1)).Clear
+        Range(a, a.Offset(h - 1, w - 1)).Clear
     Else: MsgBox "Function cc_wh error, invalid option"
     End If
 End Sub
