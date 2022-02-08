@@ -5,6 +5,7 @@
 '   ve_blk
 '   ve_wh
 '   ve
+'   cc_wh
 '
 'functions:
 '   sf_end
@@ -133,6 +134,41 @@ Sub ve_wh( _
 End Sub
 Sub ve(ByRef a As Range, ByRef b As Range)
     b.value = a.value
+End Sub
+
+'Clear contents
+'
+'cc_wh(a, w, h, mod)
+'
+'Inputs:
+'   a : Top left cell of the block.
+'   w : Width of the table.
+'   h : Height of the table.
+'   opt : Option. Either contents or all
+'
+'Example
+'
+'Clear contents for a block of cells from A1 to E1
+'   A  B  C
+'1  1  2
+'2  3  4
+'3     5  6
+'Call cc_wh(Range("A1"), 2, 2)
+'   A  B  C
+'1      
+'2      
+'3     5  6
+Sub cc_wh( _
+        ByRef a As Range, _
+        ByVal w As Integer, _
+        ByVal h As Integer, _
+        ByVal opt As String = "contents")
+    If opt = "contents" then
+        Range(a,a.Offset(h-1,w-1)).ClearContents
+    ElseIf opt = "all" then
+        Range(a,a.Offset(h-1,w-1)).Clear
+    Else: MsgBox "Function cc_wh error, invalid option"
+    End If
 End Sub
 
 
